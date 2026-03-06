@@ -5,6 +5,7 @@ export default registerAs(
   'database',
   (): SequelizeModuleOptions => ({
     dialect: 'postgres',
+    uri: process.env.DATABASE_URL,
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT
       ? parseInt(process.env.DATABASE_PORT, 10)
@@ -15,5 +16,13 @@ export default registerAs(
     autoLoadModels: true,
     logging: false,
     synchronize: true,
+    dialectOptions: process.env.DATABASE_URL
+      ? {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        }
+      : {},
   }),
 );
